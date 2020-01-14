@@ -1,0 +1,9 @@
+{
+    "python.pythonPath": ".venv/bin/python3.6",
+    "python.formatting.provider": "black",
+    "python.jediEnabled": false,
+    "python.autoComplete.extraPaths": [
+        ".venv/lib/python3.6/site-packages/"
+    ],
+    "editor.formatOnSave": true
+}

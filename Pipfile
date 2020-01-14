@@ -1,0 +1,15 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+tensorflow-rocm = "==1.13.4"
+numpy = "==1.16.2"
+keras = "==2.0.5"
+black = "*"
+
+[requires]
+python_version = "3.6"
