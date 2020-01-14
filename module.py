@@ -6,12 +6,17 @@ from keras.layers.embeddings import Embedding
 from keras.layers.convolutional import Conv1D
 from keras.models import Sequential
 
+from copy import deepcopy
 from functools import reduce
 from itertools.chain import from_iterable
 
 
 def pipe(*fns):
     return lambda x: reduce(lambda f1, f2: f2(f1), fns, x)
+
+
+def clones(module, n):
+    return Sequential([deepcopy(module) for _ in range(n)])
 
 
 def Linear(in_dim, out_dim, bias=True, w_init="linear"):
@@ -105,8 +110,42 @@ class FNN(Layer):
             ]
         )(input)
 
-def PostConvNet(num_hidden):
-    return Sequential(from_iterable([
-        Conv(in_channels=hp.num_mels * hp.outputs_per_step, out_channels=num_hidden, kernel_size=5, padding='same', w_init='tanh'),
 
-    ]))
+# def PostConvNet(num_hidden):
+#     return Sequential(
+#         [
+#             Conv(
+#                 in_channels=hp.num_mels * hp.outputs_per_step,
+#                 out_channels=num_hidden,
+#                 kernel_size=5,
+#                 padding="same",
+#                 w_init="tanh",
+#             ),
+#             clones(
+#                 Conv(
+#                     in_channels=num_hidden,
+#                     out_channels=num_hidden,
+#                     kernel_size=5,
+#                     padding=4,
+#                 ),
+#                 3,
+#             ),
+#             Conv(
+#                 in_channels=hp.num_mels * hp.outputs_per_step,
+#                 out_channels=num_hidden,
+#                 kernel_size=5,
+#                 padding="same",
+#             ),
+
+#         ]
+#     )
+
+
+class MultiheadAttention(Layer):
+    def __init__(self, num_hidden_k):
+        super(MultiheadAttention).__init__()
+
+        self.num_hidden_k = num_hidden_k
+
+    def call(self, key, value, query, mask=None, query_mask=None):
+        
